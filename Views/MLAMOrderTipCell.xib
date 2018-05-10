@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MLAMOrderTipCell_ID" rowHeight="120" id="cTP-3N-iem" customClass="MLAMOrderTipCell">
+            <rect key="frame" x="0.0" y="0.0" width="515" height="120"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cTP-3N-iem" id="mTT-dV-ham">
+                <rect key="frame" x="0.0" y="0.0" width="515" height="119.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="留言：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HwH-6O-ypS" userLabel="备注：">
+                        <rect key="frame" x="10" y="15" width="43" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.26666666666666666" green="0.26666666666666666" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gN-JZ-fFI">
+                        <rect key="frame" x="53" y="15" width="452" height="89.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.26666666666666666" green="0.26666666666666666" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="HwH-6O-ypS" firstAttribute="leading" secondItem="mTT-dV-ham" secondAttribute="leading" constant="10" id="25G-Gg-iw2"/>
+                    <constraint firstItem="HwH-6O-ypS" firstAttribute="top" secondItem="mTT-dV-ham" secondAttribute="top" constant="15" id="7GU-BS-tFY"/>
+                    <constraint firstItem="0gN-JZ-fFI" firstAttribute="leading" secondItem="HwH-6O-ypS" secondAttribute="trailing" id="I0r-Uv-01V"/>
+                    <constraint firstItem="0gN-JZ-fFI" firstAttribute="top" secondItem="HwH-6O-ypS" secondAttribute="top" id="Zxa-Fk-MPi"/>
+                    <constraint firstAttribute="bottom" secondItem="0gN-JZ-fFI" secondAttribute="bottom" constant="15" id="dpw-UR-0QC"/>
+                    <constraint firstAttribute="trailing" secondItem="0gN-JZ-fFI" secondAttribute="trailing" constant="10" id="w8l-aM-E19"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="tipLabel" destination="0gN-JZ-fFI" id="Yug-Or-JfR"/>
+                <outlet property="tipNameLabel" destination="HwH-6O-ypS" id="m9S-S0-FfF"/>
+            </connections>
+            <point key="canvasLocation" x="196.5" y="1140"/>
+        </tableViewCell>
+    </objects>
+</document>

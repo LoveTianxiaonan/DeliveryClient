@@ -1,0 +1,6 @@
+framework module JSONValidation {
+  umbrella header "JSONValidation.h"
+
+  export *
+  module * { export * }
+}

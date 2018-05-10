@@ -1,0 +1,6 @@
+framework module MLAMUtils {
+  umbrella header "MLAMUtils.h"
+
+  export *
+  module * { export * }
+}
