@@ -31,9 +31,9 @@
     return cell;
     
 }
--(void)setOrderItem:(MLAMOrderItem *)orderItem{
+-(void)setOrderItem:(SYOrderItem *)orderItem{
     _orderItem = orderItem;
-    [self.iconImageView sd_setImageWithURL:orderItem.coverIcon.toURL placeholderImage:ImageNamed(@"ic_item_default")];
+ //   [self.iconImageView sd_setImageWithURL:orderItem.coverIcon.toURL placeholderImage:ImageNamed(@"ic_item_default")];
     self.productTitleLabel.text = orderItem.title;
     self.priceLabel.text = [NSString stringWithFormat:@"￥%@",[[orderItem.price decimalNumberByDividingBy:[NSDecimalNumber decimalNumberWithString:@"100"]] twoPlaceDecimalString]];
     self.customAttributesLabel.text = orderItem.customAttrInfo;

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MLAMOrderDetailTableViewCell : UITableViewCell
-- (void)configureOrder:(MLAMOrder *)order;
+- (void)configureOrder:(SYOrder *)order;
 @end
 
 

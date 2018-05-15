@@ -22,7 +22,7 @@
 @property (assign, nonatomic) BOOL shouldCalculatedRoute2;
 @property (assign, nonatomic) long long lastUpdateLocationTime;
 
-@property (strong, nonatomic) MLAMOrder *order;
+@property (strong, nonatomic) SYOrder *order;
 @end
 @implementation MLAMDeliveryMapTableViewCell
 - (void)dealloc {
@@ -52,7 +52,7 @@
     };
 }
 
-- (void)configureOrder:(MLAMOrder *)order {
+- (void)configureOrder:(SYOrder *)order {
     self.order = order;
     self.infoLabel.text = @"";
     
@@ -61,7 +61,7 @@
     self.endPoint   = [AMapNaviPoint locationWithLatitude:order.receiverLatitude.doubleValue longitude:order.receiverLongitude.doubleValue];
     self.wayPoint = [AMapNaviPoint locationWithLatitude:order.mallLatitude.doubleValue longitude:order.mallLongitude.doubleValue];
     
-    if (order.orderState.integerValue == MLAMOrderStateNew || order.orderState.integerValue == MLAMOrderStateGotoTake) {
+    if (order.orderState.integerValue == SYOrderStateNew || order.orderState.integerValue == SYOrderStateGotoTake) {
         CLLocation *orig = [[CLLocation alloc] initWithLatitude:self.startPoint.latitude  longitude:self.startPoint.longitude];
         CLLocation* dist = [[CLLocation alloc] initWithLatitude:self.wayPoint.latitude longitude:self.wayPoint.longitude];
         CLLocationDistance kilometers = [orig distanceFromLocation:dist]/1000;
@@ -77,7 +77,7 @@
         [self.mapView removeOverlays:self.mapView.overlays];
         [[MLAMNaviWalkManager sharedManager].naviRoutes removeAllObjects];
         [self initAnnotations];
-        if (order.orderState.integerValue == MLAMOrderStateNew || order.orderState.integerValue == MLAMOrderStateGotoTake) {
+        if (order.orderState.integerValue == SYOrderStateNew || order.orderState.integerValue == SYOrderStateGotoTake) {
             self.shouldCalculatedRoute2 = YES;
             [self calculateWalkRoute1];
         }else {
@@ -92,13 +92,12 @@
 - (void)initAnnotations
 {
     [self.mapView removeAnnotations:self.mapView.annotations];
-    
     NaviPointAnnotation *beginAnnotation = [[NaviPointAnnotation alloc] init];
     [beginAnnotation setCoordinate:CLLocationCoordinate2DMake(self.startPoint.latitude, self.startPoint.longitude)];
     beginAnnotation.navPointType = NaviPointAnnotationStart;
     [self.mapView addAnnotation:beginAnnotation];
     
-    if (self.order.orderState.integerValue == MLAMOrderStateNew || self.order.orderState.integerValue == MLAMOrderStateGotoTake) {
+    if (self.order.orderState.integerValue == SYOrderStateNew || self.order.orderState.integerValue == SYOrderStateGotoTake) {
         NaviPointAnnotation *wayAnnotation = [[NaviPointAnnotation alloc] init];
         [wayAnnotation setCoordinate:CLLocationCoordinate2DMake(self.wayPoint.latitude, self.wayPoint.longitude)];
         wayAnnotation.title = @"取货点";
@@ -167,13 +166,11 @@
     selectablePolyline.selected = YES;
     [self.mapView addOverlay:selectablePolyline];
     free(coords);
-    if (self.shouldCalculatedRoute2 || self.order.orderState.integerValue == MLAMOrderStateInDelivery) {
+    if (self.shouldCalculatedRoute2 || self.order.orderState.integerValue == SYOrderStateInDelivery) {
         [self.mapView showAnnotations:self.mapView.annotations animated:NO];
         self.mapView.zoomLevel = self.mapView.zoomLevel*0.98;
     }
 }
-
-
 
 - (void)calculateWalkRoute1
 {
@@ -227,7 +224,7 @@
             pointAnnotationView.image = [ImageNamed(@"ic_site_location") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             pointAnnotationView.imageView.tintColor = kButtonBGColor;
             pointAnnotationView.centerOffset = CGPointMake(0, -9);
-            */
+             */
         }
         else if (navAnnotation.navPointType == NaviPointAnnotationEnd)
         {

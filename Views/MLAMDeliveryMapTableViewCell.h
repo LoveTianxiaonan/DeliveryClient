@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface MLAMDeliveryMapTableViewCell : UITableViewCell
-- (void)configureOrder:(MLAMOrder *)order;
+- (void)configureOrder:(SYOrder *)order;
 @end

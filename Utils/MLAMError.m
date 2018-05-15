@@ -20,7 +20,6 @@ NSString* const MLAMErrorDomain = @"MLAMErrorDomain";
                                     code:errorType
                                 userInfo:@{NSLocalizedDescriptionKey:SAFE_STRING(message)}];
     } else {
-        message = NSLocalizedString(@"error", nil);
         switch (errorType) {
             case MLAMErrorTypeServerDataNil:
                 message = NSLocalizedString(@"服务器返回数据为空", nil);

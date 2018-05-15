@@ -8,53 +8,47 @@
 
 #import "AppDelegate.h"
 #import <MaxLeap/MLTestUtils.h>
+
+/*
+ 使用cocoapods管理的高德地图库，别的库都是直接放在本地的
+ */
 @interface AppDelegate ()
-@property(nonatomic, strong) CLLocationManager *lcManager;
+
+@property (nonatomic, strong) CLLocationManager *lcManager;
+
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:kNotificationSwitch]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNotificationSwitch];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout) name:@"LogoutNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchRemoteNotification:) name:@"switchRemoteNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logOut) name:@"LogoutNotification" object:nil];
     if ([CLLocationManager authorizationStatus] < kCLAuthorizationStatusAuthorizedAlways) {
         self.lcManager = [CLLocationManager new];
-        [_lcManager requestWhenInUseAuthorization];
+        [self.lcManager requestWhenInUseAuthorization];
     }
-    
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.backgroundColor = [UIColor whiteColor];
-    
     [self configureLeapCloud];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kNotificationSwitch]) {
-        [self registerRemoteNotificationSettings];
-    }
+    [self registerNotifications];
     
     [AMapServices sharedServices].apiKey = (NSString *)APIKey;
-    [[UINavigationBar appearance] setBackgroundColor:kThemeColor];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:kThemeColor];
     
+    [[UINavigationBar appearance] setBackgroundColor:[UIColor blueColor]];
     
     if (kSharedDeliveryPerson.userSession.length > 0) {
-        MainViewController *mainVC = [MainViewController instantiateFromStoryboard];
-        UINavigationController *naVC = [[UINavigationController alloc]initWithRootViewController:mainVC];
-        self.window.rootViewController = naVC;
-    } else {
-        LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+        SYTabBarViewController *tabbarVC = [SYTabBarViewController initTabbarVCFromNibFile];
+        self.window.rootViewController = tabbarVC;
+    }else {
+        SYLoginViewController *loginVC = [[SYLoginViewController alloc] initWithNibName:@"SYLoginViewController" bundle:[NSBundle mainBundle]];
         self.window.rootViewController = loginVC;
     }
     
-    [self.window makeKeyAndVisible];
     return YES;
 }
+
+- (void)logOut {
+    
+}
+
 - (void)configureLeapCloud {
 #if defined(kProductEnvironment)
     [[MLTestUtils sharedInstance] setEnvironment:MLEnvironmentProd];
@@ -69,34 +63,12 @@
     [MaxLeap setApplicationId:ApplicationID clientKey:ClientKey site:MLSiteCN];
 }
 
-
-- (void)switchRemoteNotification:(NSNotification *)no {
-    BOOL on = [no.userInfo[@"on"] boolValue];
-    if (on) {
-        [self registerRemoteNotifications];
-    }else {
-        [self unregisterRemoteNotifications];
-    }
-}
-
-- (void)registerRemoteNotificationSettings {
+- (void)registerNotifications {
     UIUserNotificationSettings *pushsettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge|UIUserNotificationTypeSound|UIUserNotificationTypeAlert categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:pushsettings];
 }
-- (void)registerRemoteNotifications {
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-}
-- (void)unregisterRemoteNotifications {
-    [[UIApplication sharedApplication] unregisterForRemoteNotifications];
-}
 
-- (void)logout {
-    [kSharedDeliveryPerson setUserSession:nil];
-    
-    LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    AppDelegate *appDelegateTemp = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    appDelegateTemp.window.rootViewController = loginVC;
-}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -112,20 +84,12 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-    if (kSharedDeliveryPerson.userSession.length > 0) {
-        UIViewController *nav = self.window.rootViewController;
-        if ([nav isKindOfClass:[UINavigationController class]] && [[(UINavigationController*)nav topViewController] isKindOfClass:[MainViewController class]]) {
-            [(MainViewController *)[(UINavigationController*)nav topViewController] refreshLocationManagerState:nil];
-        }
-    }
+   
 }
 
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    [MLInstallation currentInstallation].badge = 0;
-    [[MLInstallation currentInstallation] saveInBackgroundWithBlock:nil];
+   
 }
 
 
@@ -144,15 +108,8 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-#if DEBUG
-    [[MLInstallation currentInstallation] setDeviceTokenFromData:deviceToken forSandbox:YES];
-#else
-    [[MLInstallation currentInstallation] setDeviceTokenFromData:deviceToken forSandbox:NO];
-#endif
-    [[MLInstallation currentInstallation] saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        
-    }];
-    NSLog(@"deviceToken : %@: %@",deviceToken, [MLInstallation currentInstallation].installationId);
+
+  
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
@@ -161,33 +118,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
 {
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    completionHandler(UIBackgroundFetchResultNoData);
-    NSLog(@"didReceiveRemoteNotificationUserInfo:\n %@",[userInfo jsonParameter]);
-    
-    if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {
-        [MLMarketingManager handlePushNotificationOpened:userInfo];
-    }
-    if (application.applicationState == UIApplicationStateActive) {
-        NSString *title = @"";
-        NSString *message = @"";
-        id alertInfo = [userInfo valueForKeyPath:@"aps.alert"];
-        if ([alertInfo isKindOfClass:[NSString class]]) {
-            title = NSLocalizedString(@"推送", nil);
-            message = alertInfo;
-        }else if([alertInfo isKindOfClass:[NSDictionary class]]) {
-            title = alertInfo[@"title"];
-            message = alertInfo[@"body"];
-        }
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                            message:message
-                                                           delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"取消", nil)
-                                                  otherButtonTitles:NSLocalizedString(@"确认", nil),nil];
-        [alertView show];
-    }else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kReloadOrderListNotificationName object:nil userInfo:@{@"animation":@(NO),@"notification":@(YES)}];
-    }
+  
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

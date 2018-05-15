@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *centerButton;
 @property (weak, nonatomic) IBOutlet UIButton *leftButton;
 @property (weak, nonatomic) IBOutlet UIButton *rightButton;
-@property (strong, nonatomic) MLAMOrder *order;
+@property (strong, nonatomic) SYOrder *order;
 @end
 @implementation MLAMOrderDeliveryTableViewCell
 
@@ -70,20 +70,20 @@
     NSString *dateString2 = [dateFormatter stringFromDate: endDate];
     return [NSString stringWithFormat:@"%@%@",dateString1,dateString2];
 }
-- (void)configureOrder:(MLAMOrder *)order {
+- (void)configureOrder:(SYOrder *)order {
     self.order = order;
     if (self.order.deliveryStartTime && self.order.deliveryEndTime) {
         self.timeLabel.text = [self stringForDate:self.order.deliveryStartTime endDate:self.order.deliveryEndTime];
     }
-    else if (self.order.orderState.integerValue == MLAMOrderStateNew) {
+    else if (self.order.orderState.integerValue == SYOrderStateNew) {
         self.timeLabel.text = [NSString stringWithFormat:NSLocalizedString(@"预计%d分钟内送达", nil),self.order.expectedDeliveryTime.intValue];
-    }else if (self.order.orderState.integerValue == MLAMOrderStateGotoTake){
+    }else if (self.order.orderState.integerValue == SYOrderStateGotoTake){
         if (self.order.orderType.integerValue == 1) {
             self.timeLabel.text = [NSString stringWithFormat:NSLocalizedString(@"已派单%d分钟", nil),(int)(-[self.order.grabOrderTime timeIntervalSinceNow]/60)];
         }else {
             self.timeLabel.text = [NSString stringWithFormat:NSLocalizedString(@"已抢单%d分钟", nil),(int)(-[self.order.grabOrderTime timeIntervalSinceNow]/60)];
         }
-    }else if (self.order.orderState.integerValue == MLAMOrderStateInDelivery) {
+    }else if (self.order.orderState.integerValue == SYOrderStateInDelivery) {
         NSInteger sec = 0;
         if (self.order.deliveryEndTime) {
             sec = [self.order.deliveryEndTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970];
@@ -102,10 +102,10 @@
     self.takeDistanceLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%.2fKM取货", nil),order.mallDistance.doubleValue];
     self.deliveryDistanceLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%.2fKM送货", nil),order.deliveryDistance.doubleValue];
     
-    [self.centerButton setTitle:order.orderState.integerValue==MLAMOrderStateNew?NSLocalizedString(@"抢单", nil):NSLocalizedString(@"确认送达", nil)
+    [self.centerButton setTitle:order.orderState.integerValue==SYOrderStateNew?NSLocalizedString(@"抢单", nil):NSLocalizedString(@"确认送达", nil)
                        forState:UIControlStateNormal];
-    self.leftButton.hidden = self.rightButton.hidden = order.orderState.integerValue!=MLAMOrderStateGotoTake;
-    self.centerButton.hidden = order.orderState.integerValue==MLAMOrderStateGotoTake;
+    self.leftButton.hidden = self.rightButton.hidden = order.orderState.integerValue!=SYOrderStateGotoTake;
+    self.centerButton.hidden = order.orderState.integerValue==SYOrderStateGotoTake;
 }
 - (IBAction)phoneButtonPressed:(id)sender {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -131,7 +131,7 @@
     
     
     
-    if (self.order.orderState.integerValue == MLAMOrderStateNew || self.order.orderState.integerValue == MLAMOrderStateGotoTake) {
+    if (self.order.orderState.integerValue == SYOrderStateNew || self.order.orderState.integerValue == SYOrderStateGotoTake) {
         addMallPhone();
     }else {
         addUserPhone();
@@ -140,12 +140,12 @@
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"取消", nil) style:UIAlertActionStyleCancel handler:nil];
     [alertController addAction:cancelAction];
-    [[MLAMViewControllerPresentHelper topViewController] presentViewController:alertController animated:YES completion:nil];
+  //  [[MLAMViewControllerPresentHelper topViewController] presentViewController:alertController animated:YES completion:nil];
 }
 
 
 - (IBAction)centerButtonPressed:(id)sender {
-    if (self.order.orderState.integerValue == MLAMOrderStateNew) {
+    if (self.order.orderState.integerValue == SYOrderStateNew) {
         [self.delegate grabOrder:self];
     }else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"提示", nil)

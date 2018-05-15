@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MLAMOrderProductDetailCell : UITableViewCell
-@property (nonatomic, strong) MLAMOrderItem *orderItem;
+@property (nonatomic, strong) SYOrderItem *orderItem;
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 @end

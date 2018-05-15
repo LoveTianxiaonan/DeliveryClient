@@ -38,11 +38,11 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)configureOrder:(MLAMOrder *)order {
+- (void)configureOrder:(SYOrder *)order {
     self.takeAddressLabel.text = order.mallName;
     self.deliveryAddressLabel.text = order.receiverAddress;
     self.takeDetailLabel.text = [order.mallAddress displayAddressString];
-    if (order.orderState.integerValue == MLAMOrderStateNew) {
+    if (order.orderState.integerValue == SYOrderStateNew) {
         self.bottomConstraint.constant = 8;
         self.userInfoLabel.hidden = YES;
     }else {

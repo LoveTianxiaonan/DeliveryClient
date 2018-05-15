@@ -19,5 +19,5 @@
 
 @property (nonatomic, weak) id <MLAMOrderDeliveryTableViewCellDelegate> delegate;
 
-- (void)configureOrder:(MLAMOrder *)order;
+- (void)configureOrder:(SYOrder *)order;
 @end

@@ -37,15 +37,13 @@
     self.realLabel.text = NSLocalizedString(@"实付：", nil);
     self.totalPriceLabel.textColor = self.realLabel.textColor = kDefaultGrayColor;
     self.priceLabel1.textColor = self.priceLabel2.textColor = self.priceLabel3.textColor = self.priceLabel4.textColor = kDefaultGrayColor;
-    
-    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 }
 
-- (void)configureOrder:(MLAMOrder *)order {
+- (void)configureOrder:(SYOrder *)order {
     self.infoLabels = [@[self.infoLabel1,self.infoLabel2,self.infoLabel3,self.infoLabel4] mutableCopy];
     self.priceLabels = [@[self.priceLabel1,self.priceLabel2,self.priceLabel3,self.priceLabel4] mutableCopy];
     
